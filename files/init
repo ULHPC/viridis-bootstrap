@@ -1,0 +1,95 @@
+#!/bin/sh
+[ -d /dev ] || mkdir -m 0755 /dev
+[ -d /root ] || mkdir -m 0700 /root
+[ -d /sys ] || mkdir /sys
+[ -d /proc ] || mkdir /proc
+[ -d /tmp ] || mkdir /tmp
+mkdir -p /var/lock
+mount -t sysfs -o nodev,noexec,nosuid sysfs /sys
+mount -t proc -o nodev,noexec,nosuid proc /proc
+# Some things don't work properly without /etc/mtab.
+ln -sf /proc/mounts /etc/mtab
+grep -q '\<quiet\>' /proc/cmdline || echo "Loading, please wait..."
+# Note that this only becomes /dev on the real filesystem if udev's scripts
+# are used; which they will be, but it's worth pointing out
+if ! mount -t devtmpfs -o mode=0755 udev /dev; then
+        echo "W: devtmpfs not available, falling back to tmpfs for /dev"
+        mount -t tmpfs -o mode=0755 udev /dev
+        [ -e /dev/console ] || mknod -m 0600 /dev/console c 5 1
+        [ -e /dev/null ] || mknod /dev/null c 1 3
+fi
+mkdir /dev/pts
+mount -t devpts -o noexec,nosuid,gid=5,mode=0620 devpts /dev/pts || true
+mount -t tmpfs -o "nosuid,size=20%,mode=0755" tmpfs /run
+mkdir /run/initramfs
+# compatibility symlink for the pre-oneiric locations
+ln -s /run/initramfs /dev/.initramfs
+# Export the dpkg architecture
+export DPKG_ARCH=
+. /conf/arch.conf
+# Set modprobe env
+export MODPROBE_OPTIONS="-qb"
+# Export relevant variables
+export ROOT=
+export ROOTDELAY=
+export ROOTFLAGS=
+export ROOTFSTYPE=
+export IP=
+export BOOT=
+export BOOTIF=
+export UBIMTD=
+export break=
+export init=/sbin/init
+export quiet=n
+export readonly=y
+export rootmnt=/root
+export debug=
+export panic=
+export blacklist=
+export resume=
+export resume_offset=
+export recovery=
+# mdadm needs hostname to be set. This has to be done before the udev rules are called!
+if [ -f "/etc/hostname" ]; then
+       /bin/hostname -b -F /etc/hostname 2>&1 1>/dev/null
+fi
+# Bring in the main config
+. /conf/initramfs.conf
+for conf in conf/conf.d/*; do 
+        [ -f ${conf} ] && . ${conf}
+done
+. /scripts/functions
+# Parse command line options
+for x in $(cat /proc/cmdline); do                                                                     
+   case $x in
+       iscsiclient=*)
+               ISCSICLIENT=${x#iscsiclient=}                                                         
+               ;;
+       iscsitarget=*)
+               ISCSITARGET=${x#iscsitarget=}                                                         
+               ;;
+       iscsiserver=*)
+               ISCSISERVER=${x#iscsiserver=}                                                         
+               ;; 
+       ip=*)
+               IPINFO=${x#ip=}
+               BOOT_IP_ADDRESS=$(echo "$IPINFO" | cut -d':' -f1)
+               BOOT_NETMASK=$(echo "$IPINFO" | cut -d':' -f4)
+               HOSTNAME=viridis-$(echo "$BOOT_IP_ADDRESS" | cut -d'.' -f4)
+               ;;
+        esac
+done
+echo "Configuring network"
+ifconfig eth0 netmask ${BOOT_NETMASK} ${BOOT_IP_ADDRESS} 
+echo "Loading iSCSI drivers"
+modprobe scsi_transport_iscsi
+modprobe iscsi_tcp
+echo "Mounting root fs"
+mkdir /new_root
+iscsistart -i ${HOSTNAME} -t ${ISCSITARGET}:${HOSTNAME} -g 1 -a ${ISCSISERVER}
+sleep 1
+mount /dev/sda /new_root
+echo ${HOSTNAME} > /new_root/etc/hostname
+umount /sys /proc
+echo "Switching to new root"
+exec switch_root /new_root /sbin/init
