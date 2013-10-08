@@ -19,6 +19,11 @@ Edit the configuration variables in bootstrap.sh and execute it:
 Execute mkinitrd.sh, the parameter is the **absolute path** to the original initrd
 
     ./mkinitrd.sh /tmp/wheezy-initrd
+    
+    [...]
+    
+    === OUTPUT ===
+    Initrd custom: /tmp/wheezy-initrd-customized
 
 # Push in production
 
