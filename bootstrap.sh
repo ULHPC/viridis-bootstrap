@@ -14,7 +14,7 @@ IMAGE_SIZE=700 # in MB
 
 CHROOT_PATH=/mnt/chroot
 
-PACKAGES="vim openssh-server open-iscsi screen tmux strace rsync parallel iperf ethtool host build-essential less"
+PACKAGES="vim screen tmux strace rsync parallel iperf ethtool host build-essential less"
 
 LINUX_IMAGE_URL=http://ppa.launchpad.net/calxeda/kernel-ppa/ubuntu/pool/main/l/linux/linux-image-3.5.0-1000-highbank_3.5.0-1000.167_armhf.deb
 
@@ -66,7 +66,7 @@ $TARGET rm /root/linux-image.deb
 # Copy config files
 cp files/ttyAMA0.conf   $CHROOT_PATH/etc/init/
 cp files/ntp.conf       $CHROOT_PATH/etc/ntp.conf
-cp files/resolv.conf       $CHROOT_PATH/etc/resolv.conf
+cp files/resolv.conf    $CHROOT_PATH/etc/resolv.conf
 
 # Remove getty on tty*
 sed -i '/getty 38400/d' $CHROOT_PATH/etc/inittab
