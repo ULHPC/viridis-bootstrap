@@ -8,6 +8,8 @@ IMAGE=/tmp/wheezy-ref.img
 INITRD=/tmp/wheezy-initrd
 KERNEL=/tmp/wheezy-kernel
 
+PASSWORD=changeme
+
 IMAGE_SIZE=700 # in MB
 
 CHROOT_PATH=/mnt/chroot
@@ -65,8 +67,16 @@ $TARGET rm /root/linux-image.deb
 cp files/ttyAMA0.conf   $CHROOT_PATH/etc/init/
 cp files/ntp.conf       $CHROOT_PATH/etc/ntp.conf
 
+# Remove getty on tty*
+sed -i '/getty 38400/d' $CHROOT_PATH/etc/inittab
+
 cp $CHROOT_PATH/boot/vmlinuz-3.5.0-1000-highbank    $KERNEL
 cp $CHROOT_PATH/boot/initrd.img-3.5.0-1000-highbank $INITRD
+
+# Set password
+$TARGET chpasswd << EOF
+root:${PASSWORD}
+EOF
 
 umount $CHROOT_PATH
 
