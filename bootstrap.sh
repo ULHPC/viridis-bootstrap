@@ -17,6 +17,7 @@ CHROOT_PATH=/mnt/chroot
 PACKAGES="vim screen tmux strace rsync parallel iperf ethtool host build-essential less git subversion"
 
 LINUX_IMAGE_URL=http://ppa.launchpad.net/calxeda/kernel-ppa/ubuntu/pool/main/l/linux/linux-image-3.5.0-1000-highbank_3.5.0-1000.167_armhf.deb
+LINUX_VERSION=3.5.0-1000-highbank
 
 DEBIAN_MIRROR=http://debian.mirror.root.lu/debian/
 
@@ -54,8 +55,8 @@ $TARGET apt-get install -y $PACKAGES
 $TARGET wget $LINUX_IMAGE_URL   -O /root/linux-image.deb
 $TARGET dpkg -i --force-depends    /root/linux-image.deb
 
-$TARGET ln -s /boot/vmlinuz-3.5.0-1000-highbank    /boot/vmlinuz
-$TARGET ln -s /boot/initrd.img-3.5.0-1000-highbank /boot/initrd.img
+$TARGET ln -s /boot/vmlinuz-$LINUX_VERSION    /boot/vmlinuz
+$TARGET ln -s /boot/initrd.img-$LINUX_VERSION /boot/initrd.img
 
 
 # Clean
@@ -71,8 +72,8 @@ cp files/resolv.conf    $CHROOT_PATH/etc/resolv.conf
 # Remove getty on tty*
 sed -i '/getty 38400/d' $CHROOT_PATH/etc/inittab
 
-cp $CHROOT_PATH/boot/vmlinuz-3.5.0-1000-highbank    $KERNEL
-cp $CHROOT_PATH/boot/initrd.img-3.5.0-1000-highbank $INITRD
+cp $CHROOT_PATH/boot/vmlinuz-$LINUX_VERSION    $KERNEL
+cp $CHROOT_PATH/boot/initrd.img-$LINUX_VERSION $INITRD
 
 # Set password
 $TARGET chpasswd << EOF
