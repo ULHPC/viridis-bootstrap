@@ -3,7 +3,7 @@
 set -x
 
 INITRD_ORIG=$1
-INITRD_CUSTOM=/tmp/wheezy-initrd-customized
+INITRD_CUSTOM=/tmp/wheezy-initrd-customized.gz
 
 WORKDIR=/tmp/cpio
 CURRENT=`pwd`
