@@ -53,7 +53,7 @@ debootstrap --no-check-gpg --arch=armhf $VERSION $CHROOT_PATH $MIRROR
 if [ "$DISTRIB" = "ubuntu" ] ; then
   $TARGET mv /sbin/initctl /sbin/initctl.orig
   $TARGET ln -s /bin/true /sbin/initctl
-  echo "" > $CHROOT_PATH/etc/apt/sources.list
+  echo "deb http://ports.ubuntu.com ${VERSION} main restricted universe multiverse" > $CHROOT_PATH/etc/apt/sources.list
 fi
 
 # Modules
