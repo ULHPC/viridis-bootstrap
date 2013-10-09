@@ -45,7 +45,7 @@ debootstrap --no-check-gpg --arch=armhf wheezy $CHROOT_PATH $DEBIAN_MIRROR
 echo $MODULES > $CHROOT_PATH/etc/modules
 
 # NFS mount point
-mkdir -p ${MOUNT_POINT}
+mkdir -p ${NFS_MOUNTPOINT}
 echo "${NFS_EXPORT} ${NFS_MOUNTPOINT} nfs async,defaults,auto,nfsvers=3,tcp 0 0" >> $CHROOT_PATH/etc/fstab
 
 # Preseed
