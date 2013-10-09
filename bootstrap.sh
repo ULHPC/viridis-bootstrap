@@ -15,6 +15,7 @@ IMAGE_SIZE=700 # in MB
 CHROOT_PATH=/mnt/chroot
 
 PACKAGES="vim screen tmux strace rsync parallel iperf ethtool host build-essential less git subversion stress"
+MODULES="highbank_cpufreq"
 
 LINUX_IMAGE_URL=http://ppa.launchpad.net/calxeda/kernel-ppa/ubuntu/pool/main/l/linux/linux-image-3.5.0-1000-highbank_3.5.0-1000.167_armhf.deb
 LINUX_VERSION=3.5.0-1000-highbank
@@ -36,6 +37,9 @@ mount -o loop $IMAGE $CHROOT_PATH
 
 apt-get install -y debootstrap
 debootstrap --no-check-gpg --arch=armhf wheezy $CHROOT_PATH $DEBIAN_MIRROR
+
+# Modules
+echo $MODULES > $CHROOT_PATH/etc/modules
 
 # Preseed
 
