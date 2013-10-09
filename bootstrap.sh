@@ -22,6 +22,9 @@ LINUX_VERSION=3.5.0-1000-highbank
 
 DEBIAN_MIRROR=http://debian.mirror.root.lu/debian/
 
+NFS_MOUNTPOINT=/home/users
+NFS_EXPORT=10.226.251.13:/export/users
+
 TARGET="chroot ${CHROOT_PATH} "
 
 # Image creation
@@ -41,6 +44,10 @@ debootstrap --no-check-gpg --arch=armhf wheezy $CHROOT_PATH $DEBIAN_MIRROR
 # Modules
 echo $MODULES > $CHROOT_PATH/etc/modules
 
+# NFS mount point
+mkdir -p ${MOUNT_POINT}
+echo "${NFS_EXPORT} ${MOUNT_POINT} nfs async,defaults,auto,nfsvers=3,tcp 0 0" >> $CHROOT_PATH/etc/fstab
+
 # Preseed
 
 $TARGET apt-get install -y debconf-utils
@@ -50,7 +57,7 @@ echo "localepurge     localepurge/nopurge     multiselect     en_US, en_US.ISO-8
 
 $TARGET apt-get update
 $TARGET apt-get install -y localepurge
-$TARGET apt-get install -y openssh-server open-iscsi ntp
+$TARGET apt-get install -y openssh-server open-iscsi ntp nfs-common
 $TARGET apt-get install -y uboot-mkimage initramfs-tools module-init-tools
 $TARGET apt-get install -y $PACKAGES
 
