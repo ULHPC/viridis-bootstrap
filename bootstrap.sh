@@ -80,13 +80,11 @@ cp files/ttyAMA0.conf    $CHROOT_PATH/etc/init/
 cp files/ntp.conf        $CHROOT_PATH/etc/ntp.conf
 cp files/resolv.conf     $CHROOT_PATH/etc/resolv.conf
 cp files/authorized_keys $CHROOT_PATH/root/.ssh/
+cp files/rc.local        $CHROOT_PATH/etc/rc.local
+chmod +x $CHROOT_PATH/etc/rc.local
 
 # Remove getty on tty*
 sed -i '/getty 38400/d' $CHROOT_PATH/etc/inittab
-
-# Tweak
-echo "echo F > /sys/class/net/eth0/queues/rx-0/rps_cpus" >> $CHROOT_PATH/etc/rc.local
-echo "ifconfig eth0 mtu 9000"                            >> $CHROOT_PATH/etc/rc.local
 
 cp $CHROOT_PATH/boot/vmlinuz-$LINUX_VERSION    $KERNEL
 cp $CHROOT_PATH/boot/initrd.img-$LINUX_VERSION $INITRD
