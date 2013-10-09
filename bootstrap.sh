@@ -10,7 +10,7 @@ KERNEL=/tmp/wheezy-kernel
 
 PASSWORD=changeme
 
-IMAGE_SIZE=700 # in MB
+IMAGE_SIZE=4000 # in MB
 
 CHROOT_PATH=/mnt/chroot
 
