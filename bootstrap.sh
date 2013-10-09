@@ -76,9 +76,10 @@ $TARGET aptitude clean
 $TARGET rm /root/linux-image.deb
 
 # Copy config files
-cp files/ttyAMA0.conf   $CHROOT_PATH/etc/init/
-cp files/ntp.conf       $CHROOT_PATH/etc/ntp.conf
-cp files/resolv.conf    $CHROOT_PATH/etc/resolv.conf
+cp files/ttyAMA0.conf    $CHROOT_PATH/etc/init/
+cp files/ntp.conf        $CHROOT_PATH/etc/ntp.conf
+cp files/resolv.conf     $CHROOT_PATH/etc/resolv.conf
+cp files/authorized_keys $CHROOT_PATH/root/.ssh/
 
 # Remove getty on tty*
 sed -i '/getty 38400/d' $CHROOT_PATH/etc/inittab
