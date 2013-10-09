@@ -46,7 +46,7 @@ echo $MODULES > $CHROOT_PATH/etc/modules
 
 # NFS mount point
 mkdir -p ${MOUNT_POINT}
-echo "${NFS_EXPORT} ${MOUNT_POINT} nfs async,defaults,auto,nfsvers=3,tcp 0 0" >> $CHROOT_PATH/etc/fstab
+echo "${NFS_EXPORT} ${NFS_MOUNTPOINT} nfs async,defaults,auto,nfsvers=3,tcp 0 0" >> $CHROOT_PATH/etc/fstab
 
 # Preseed
 
