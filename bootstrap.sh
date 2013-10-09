@@ -14,7 +14,7 @@ IMAGE_SIZE=4000 # in MB
 
 CHROOT_PATH=/mnt/chroot
 
-PACKAGES="vim screen tmux strace rsync parallel iperf ethtool host build-essential less git subversion stress"
+PACKAGES="debootstrap vim screen tmux strace rsync parallel iperf ethtool host build-essential less git subversion stress"
 MODULES="highbank_cpufreq"
 
 LINUX_IMAGE_URL=http://ppa.launchpad.net/calxeda/kernel-ppa/ubuntu/pool/main/l/linux/linux-image-3.5.0-1000-highbank_3.5.0-1000.167_armhf.deb
