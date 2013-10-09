@@ -4,9 +4,9 @@ set -x
 
 # Config
 
-IMAGE=/tmp/wheezy-ref.img
-INITRD=/tmp/wheezy-initrd
-KERNEL=/tmp/wheezy-kernel
+IMAGE=/home/users/hcartiaux/wheezy-ref.img
+INITRD=/home/users/hcartiaux/wheezy-initrd
+KERNEL=/home/users/hcartiaux/wheezy-kernel
 
 PASSWORD=changeme
 
@@ -79,6 +79,7 @@ $TARGET rm /root/linux-image.deb
 cp files/ttyAMA0.conf    $CHROOT_PATH/etc/init/
 cp files/ntp.conf        $CHROOT_PATH/etc/ntp.conf
 cp files/resolv.conf     $CHROOT_PATH/etc/resolv.conf
+mkdir -p $CHROOT_PATH/root/.ssh
 cp files/authorized_keys $CHROOT_PATH/root/.ssh/
 cp files/rc.local        $CHROOT_PATH/etc/rc.local
 chmod +x $CHROOT_PATH/etc/rc.local
