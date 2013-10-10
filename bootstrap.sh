@@ -2,7 +2,8 @@
 
 set -x
 
-DISTRIB=ubuntu
+# DISTRIB=ubuntu
+DISTRIB=debian
 
 # Config
 
@@ -60,7 +61,7 @@ fi
 echo $MODULES > $CHROOT_PATH/etc/modules
 
 # NFS mount point
-mkdir -p ${NFS_MOUNTPOINT}
+mkdir -p $CHROOT_PATH/$NFS_MOUNTPOINT
 echo "${NFS_EXPORT} ${NFS_MOUNTPOINT} nfs async,defaults,auto,nfsvers=3,tcp 0 0" >> $CHROOT_PATH/etc/fstab
 
 # Preseed
