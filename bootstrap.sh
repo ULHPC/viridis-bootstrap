@@ -36,6 +36,7 @@ NFS_EXPORT=10.226.251.13:/export/users
 
 TARGET="chroot ${CHROOT_PATH} "
 INSTALL="apt-get install -y --allow-unauthenticated "
+export DEBIAN_FRONTEND=noninteractive
 
 # Image creation
 
@@ -110,14 +111,25 @@ mkdir -p $CHROOT_PATH/root/.ssh
 cp files/authorized_keys $CHROOT_PATH/root/.ssh/
 cp files/rc.local        $CHROOT_PATH/etc/rc.local
 chmod +x $CHROOT_PATH/etc/rc.local
+cp files/motd            $CHROOT_PATH/etc/motd
 
 # Remove getty on tty*
-sed -i '/getty 38400/d' $CHROOT_PATH/etc/inittab
+sed -i '/getty 38400/d'  $CHROOT_PATH/etc/inittab
 
 # Set password
 $TARGET chpasswd << EOF
 root:${PASSWORD}
 EOF
+
+# ldap
+$TARGET $INSTALL libnss-ldap libpam-ldap
+$TARGET /etc/init.d/nscd stop
+cp files/ldap.conf       $CHROOT_PATH/etc/ldap/ldap.conf
+$TARGET ln -sf /etc/ldap/ldap.conf /etc/pam_ldap.conf
+$TARGET ln -sf /etc/ldap/ldap.conf /etc/libnss-ldap.conf
+$TARGET sed -s -i 's/passwd:[ ]*\(.*\)$/passwd: \1 ldap # bootstrap.sh/' /etc/nsswitch.conf
+$TARGET sed -s -i 's/group:[ ]*\(.*\)$/group: \1 ldap   # bootstrap.sh/' /etc/nsswitch.conf
+$TARGET sed -s -i 's/shadow:[ ]*\(.*\)$/shadow: \1 ldap # bootstrap.sh/' /etc/nsswitch.conf
 
 umount $CHROOT_PATH
 
