@@ -35,6 +35,8 @@ fi
 NFS_MOUNTPOINT=/home/users
 NFS_EXPORT=10.226.251.13:/export/users
 
+TMPFS_MOUNTPOINT=/mnt/tmpfs
+
 TARGET="chroot ${CHROOT_PATH} "
 INSTALL="apt-get install -y --allow-unauthenticated "
 export DEBIAN_FRONTEND=noninteractive
@@ -65,6 +67,10 @@ echo $MODULES > $CHROOT_PATH/etc/modules
 # NFS mount point
 mkdir -p $CHROOT_PATH/$NFS_MOUNTPOINT
 echo "${NFS_EXPORT} ${NFS_MOUNTPOINT} nfs async,defaults,auto,nfsvers=3,tcp 0 0" >> $CHROOT_PATH/etc/fstab
+
+# TMPFS mount point
+mkdir -p $CHROOT_PATH/$TMPFS_MOUNTPOINT
+echo "tmpfs ${TMPFS_MOUNTPOINT} tmpfs nodev,nosuid 0 0" >> $CHROOT_PATH/etc/fstab
 
 # Preseed
 
