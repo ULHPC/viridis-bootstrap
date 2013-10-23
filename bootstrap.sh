@@ -18,7 +18,7 @@ IMAGE_SIZE=4000 # in MB
 CHROOT_PATH=/mnt/chroot
 
 PACKAGES="debootstrap vim screen tmux strace rsync iperf ethtool host build-essential less git subversion stress parallel aptitude"
-PACKAGES_USER="gfortran"
+PACKAGES_USER="gfortran libreadline6"
 MODULES="highbank_cpufreq"
 
 if [ "$DISTRIB" = "debian" ] ; then
