@@ -33,7 +33,7 @@ elif [ "$DISTRIB" = "ubuntu" ] ; then
 fi
 
 NFS_MOUNTPOINT=/home/users
-NFS_EXPORT=10.226.251.13:/export/users
+NFS_EXPORT=10.221.251.13:/export/users
 
 TMPFS_MOUNTPOINT=/mnt/tmpfs
 
