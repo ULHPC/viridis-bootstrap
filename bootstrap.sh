@@ -112,6 +112,10 @@ $TARGET aptitude clean
 $TARGET rm -f /root/linux-image.deb
 
 # Copy config files
+
+[ "$DISTRIB" = "debian" ] && \
+cp files/sources.list $CHROOT_PATH/etc/apt/sources.list
+
 cp files/ttyAMA0.conf    $CHROOT_PATH/etc/init/
 cp files/ntp.conf        $CHROOT_PATH/etc/ntp.conf
 cp files/resolv.conf     $CHROOT_PATH/etc/resolv.conf
@@ -128,6 +132,11 @@ sed -i '/getty 38400/d'  $CHROOT_PATH/etc/inittab
 $TARGET chpasswd << EOF
 root:${PASSWORD}
 EOF
+
+# Update the system
+$TARGET apt-get update
+$TARGET apt-get upgrade -y
+
 
 # ldap
 $TARGET $INSTALL libnss-ldap libpam-ldap
