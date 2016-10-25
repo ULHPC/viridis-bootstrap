@@ -13,7 +13,7 @@ KERNEL=/home/users/hcartiaux/viridis-kernel
 
 PASSWORD=changeme
 
-IMAGE_SIZE=4000 # in MB
+IMAGE_SIZE=10000 # in MB
 
 CHROOT_PATH=/mnt/chroot
 
