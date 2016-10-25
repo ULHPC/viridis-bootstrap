@@ -114,7 +114,7 @@ $TARGET rm -f /root/linux-image.deb
 # Copy config files
 
 [ "$DISTRIB" = "debian" ] && \
-cp files/sources.list $CHROOT_PATH/etc/apt/sources.list
+cp files/sources.list    $CHROOT_PATH/etc/apt/sources.list
 
 cp files/ttyAMA0.conf    $CHROOT_PATH/etc/init/
 cp files/ntp.conf        $CHROOT_PATH/etc/ntp.conf
