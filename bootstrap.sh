@@ -139,6 +139,11 @@ $TARGET sed -s -i 's/passwd:[ ]*\(.*\)$/passwd: \1 ldap # bootstrap.sh/' /etc/ns
 $TARGET sed -s -i 's/group:[ ]*\(.*\)$/group: \1 ldap   # bootstrap.sh/' /etc/nsswitch.conf
 $TARGET sed -s -i 's/shadow:[ ]*\(.*\)$/shadow: \1 ldap # bootstrap.sh/' /etc/nsswitch.conf
 
+# locales
+
+$TARGET sed -i '/en_US.UTF-8/s/^# //' /etc/locale.gen
+$TARGET locale-gen
+
 umount $CHROOT_PATH
 
 echo "== OUTPUT =="
