@@ -153,6 +153,10 @@ $TARGET sed -s -i 's/shadow:[ ]*\(.*\)$/shadow: \1 ldap # bootstrap.sh/' /etc/ns
 $TARGET sed -i '/en_US.UTF-8/s/^# //' /etc/locale.gen
 $TARGET locale-gen
 
+# UL network hack
+
+echo net.ipv4.tcp_sack=0 > $CHROOT_PATH/etc/sysctl.d/net.ipv4.tcp_sack.conf
+
 umount $CHROOT_PATH
 
 echo "== OUTPUT =="
